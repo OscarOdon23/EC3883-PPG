@@ -1,0 +1,53 @@
+Se necesitan sensores de:
+- PPG -> Mediciones de la densidad/volumen de la sangre en las venas a través
+         de la reflexión de ondas electromagnéticas emitidas comunmente por un fotodiodo.
+- Ritmo cardíaco -> Número de veces que se contrae el corazón en 1 minuto.
+                    Se puede determinar de un PPG crudo.
+- SPO2 -> Saturation of Peripheral Oxygen / Saturación de Oxígeno Periférico.
+          Ni idea de que es. Se puede determinar de un PPG crudo.
+- Variabilidad cardíaca --> Se puede determinar del ritmo cardíaco (según el profesor).
+
+¿Que se necesita fundamentalmente?
+- Algo que mida el PPG. No se puede hacer nada sin eso.
+
+¿Qué es un Sensor Hub?
+Básicamente es un microcontrolador que se encarga de manejar el sensor que mide los datos crudos y de calcular variables de interés automaticamente o por que se programa para ello.
+Puede o no ser el mismo microcontrolador que se usa para transmitir los datos al "cliente".
+Es útil si ya hace los calculos necesarios de fábrica ya que entonces el mcu que lo maneja solo tiene que pedirle los datos determinados y mandarlos a la aplicación que usa el cliente.
+
+¿Donde va el Sensor Hub en la cadena circuital?
+- MCU --- Sensor Hub --- Sensor
+
+Sensores PPG:
+- MAX30102 (Usa comunicación I2C)
+
+Sensores Hub:
+- MAX32664 (Usa comunicación I2C)
+
+Circuito con Sensor Hub --> Hay que saber como programar al Sensor Hub para leer al Sensor
+Circuito sin Sensor Hub --> Hay que implementar/usar rutinas de calculo existentes para calcular el resto de las variables requeridas a través de un PPG.
+
+Microcontroladores:
+- ESP32 C3 (Espressif)
+- PIC32MZ W1 (Microchip)
+^ Ambos tienen capacidades inalámbricas y puertos de comunicación I2C
+
+Precios:
+- PIC32MZ W1 -- https://www.digikey.com/en/product-highlight/m/microchip-technology/pic32mz-w1-wi-fi-soc-and-module-family
+- ESP32 C3 -- https://www.digikey.com/en/products/detail/espressif-systems/ESP32-C3/14115579
+- MAX30102 -- https://www.digikey.com/en/products/detail/analog-devices-inc-maxim-integrated/MAX30102EFD-T/6188734
+- MAX32664 -- https://www.digikey.com/en/products/detail/analog-devices-inc-maxim-integrated/MAX32664GTGA-T/11484453
+
+¿Cómo programar los micros?:
+- ESP32_C3
+  - Espressif IDE, Arduino IDE
+    https://docs.espressif.com/projects/espressif-ide/en/latest/downloads.html#downloads
+    https://github.com/arduino/arduino-ide/releases
+- PIC32MZ W1
+  - MPLAB X IDE, MPLAB Harmony v3, MPLAB Code Configurator (MCC)
+    https://www.microchip.com/en-us/tools-resources/develop/mplab-x-ide
+    https://www.microchip.com/en-us/tools-resources/configure/mplab-harmony
+    https://www.microchip.com/en-us/tools-resources/configure/mplab-code-configurator
+    
+Módulos de Adafruit --> Son caros y no miden directamente el PPG que es requerido
+Módulos de Mikroe --> Igual que en Adafruit
