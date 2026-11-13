@@ -1,0 +1,103 @@
+MICROPROCESADORES
+
+PIC32MZ
+
+Este microprocesador tiene capacidades de conexión inalambrica (wifi). Tiene varios modelos pero el que se va a usar es el primero listado en la hoja de datos de la familia.
+
+PIC32MZ1025W104132
+
+Tiene 132 pines y un empaquetado de 10 x 10 x 0.9 mm (1 cm^2 de superficie). Soporta I2C, UART, SPI, CAN etc. Puede ser programado con MPLAB X IDE con un compilador XC32. 
+
+Un módulo de pruebas rápidas/programación para este microprocesador puede ser el "PIC32 WFI32E Curiosity Board" --> https://www.microchip.com/en-us/development-tool/EV12F11A
+Se necesita MPLAB X IDE, XC32 y MPLAB Snap.
+
+ESP32 C3
+
+microprocesador tiene capacidades de conexión inalambrica (wifi) y tiene capacidades de comunicación I2C. Se puede programar a través de Arduino IDE or Espressif IDE:
+https://docs.espressif.com/projects/espressif-ide/en/latest/downloads.html#downloads
+https://github.com/arduino/arduino-ide/releases
+
+Una placa pruebas rápidas se puede conseguir en varias páginas web
+https://es.aliexpress.com/item/1005009157602185.html?aff_fcid=5db9788d812646e08d0dfff12d5dc49e-1794595449411-01882-_c2IQl8uT&tt=CPS_NORMAL&aff_fsk=_c2IQl8uT&aff_platform=shareComponent-detail&sk=_c2IQl8uT&aff_trace_key=5db9788d812646e08d0dfff12d5dc49e-1794595449411-01882-_c2IQl8uT&terminal_id=de7c2406c64743f28f7f78002cbf39f5&afSmartRedirect=y
+
+############
+############
+############
+CASO CON HUB
+
+DIAGRAMA DE BLOQUES CON MAX32664
+
+PIC32MZ / ESP32 C3 -- microcontrolador con capacidad wifi
+MAX32664 -- familia de sensores hub (existen los tipo A, B, C y D)
+MAX30102 -- sensor de presión de sangre/ritmo cardíaco/SPO2
+
+conexión de bloques:
+PIC32MZ / ESP32 C3 <-- (I2C) --> MAX32664 (A/B/C/D) <-- (I2C/SPI) --> sensor
+                                         | <----------- (I2C/SPI) --> accelerómetro
+                            
+sensores compatibles por familia:
+Tipo A (I2C) --> mediciones del ritmo cardíaco y SPO2 a través del dedo
+Tipo B (SPI) --> mediciones del ritmo cardíaco a través de la muñeca
+Tipo C (SPI) --> mediciones del ritmo cardíaco y SPO2 a través de la muñeca/oido
+Tipo D (I2C) --> mediciones del ritmo cardíaco, SPO2 y presión de sangre a través del dedo
+
+El tipo D es el que se quiere usar ya que se necesita tener acceso a un PPG que lo otorga la medida de presión en sangre
+
+conexión de bloques reducida:
+PIC32MZ / ESP32 C3 <-- (I2C) --> MAX32664 (D) <-- (I2C) --> (MAX30101 / MAX30102)
+
+Para el caso del informe, se seleccionó el MAX30102 (es prácticamente igual que el MAX30101)
+
+conexión de bloques final:
+PIC32MZ / ESP32 C3 <-- (I2C) --> MAX32664 (D) <-- (I2C) --> MAX30102
+
+Se puede usar un módulo de pruebas rápidas que integra el MAX32664 y MAX30101 de SparkFun --> https://www.sparkfun.com/sparkfun-pulse-oximeter-and-heart-rate-sensor-max30101-max32664-qwiic.html
+Este módulo conectado al módulo de pruebas del PIC32MZ / ESP32 C3 sería el entorno de desarrollo de pruebas inicial
+Las funciones para leer los datos del módulo de MAX32664 y MAX30101 estan definidas en este repositorio de GitHub, para probar el dispositivo hay que traducir estas funciones al entorno de PIC32 / ESP32 --> https://github.com/sparkfun/SparkFun_Bio_Sensor_Hub_Library
+
+COMPONENTES A USAR
+
+- PIC32MZ1025W104132 / ESP32 C3
+- MAX32664 (versión D)
+- MAX30102
+- Baterías / fuentes de 5.0, 3.3 y 1.8 voltios
+- Conversor lógico de 3.3 a 1.8 voltios
+- Cables de conexión
+- Resistencias: 4.7 k ohms
+- Capacitores: 1 u y 4.7 u faradios
+
+CIRCUITO DE PRUEBA
+
+Con todos los componentes definidos, se tiene entonces el siguiente diagrama de circuito simplificado para probar los componentes. Se dibujó a mano ya que proteus no soporta modelos PIC32
+
+circuito_con_hub.png
+
+############
+############
+############
+CASO SIN HUB
+
+DIAGRAMA DE BLOQUES CON MAX30102
+
+PIC32MZ / ESP32 C3 -- microcontrolador con capacidad wifi
+MAX30102 -- sensor de presión de sangre/ritmo cardíaco/SPO2
+
+conexión de bloques:
+PIC32MZ / ESP32 C3 <-- (I2C) --> MAX30102
+
+COMPONENTES A USAR
+
+- PIC32MZ1025W104132 / ESP32 C3
+- MAX30102
+- Baterías / fuentes de 5.0, 3.3 y 1.8 voltios
+- Conversor lógico de 3.3 a 1.8 voltios
+- Cables de conexión
+- Resistencias: 4.7 k ohms
+- Capacitores: 1 u y 4.7 u faradios
+
+CIRCUITO DE PRUEBA
+
+Con todos los componentes definidos, se tiene entonces el siguiente diagrama de circuito simplificado para probar los componentes. Se dibujó a mano ya que proteus no soporta modelos PIC32
+
+circuito_sin_hub.png
+
